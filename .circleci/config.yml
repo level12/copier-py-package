@@ -1,24 +1,20 @@
 version: 2.1
 
+workflows:
+  build-all:
+    jobs:
+      - nox
+
 jobs:
 
   nox:
 
     docker:
-      - image: level12/copier-py-ci:22.04
+      - image: cimg/base:2025.02
 
     steps:
       - checkout
-
+      - setup_remote_docker
       - run:
-          name: run nox
-          command: |
-            mise run ci-nox
-
-      - store_test_results:
-          path: ci/test-reports/
-
-workflows:
-  build-all:
-    jobs:
-      - nox
+          name: build it
+          command: docker compose build --pull cimg

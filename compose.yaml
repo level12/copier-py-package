@@ -1,14 +1,11 @@
 services:
-  cimg:
-    # The build key is important is it keeps our local docker building new images when changes
-    # are made to the project.  Without it, once its built, it will keep using the image
-    # currently in docker.
+  muvis:
     build: &build
       context: .
       dockerfile: ci/Dockerfile
       args:
         UBUNTU_VERSION: 22.04
-    image: level12/copier-py-ci:22.04
+    image: ghcr.io/level12/copier-py-muvis
 
 
   # Run nox very close to how it will be ran in CI:
@@ -25,7 +22,7 @@ services:
   # No session limit, still send "-k version" to pytest
   #   ❯ docker compose run --build --rm nox -- -- -k version
   nox:
-    extends: cimg
+    extends: muvis
     build:
       # Even though we extend, use a reference so target can be specified.
       <<: *build
